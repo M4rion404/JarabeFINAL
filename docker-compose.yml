@@ -14,5 +14,22 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  api:
+    build: .
+    container_name: bank_api
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    command: >
+      sh -c "
+      npx prisma generate &&
+      npx prisma migrate deploy &&
+      node dist/src/main.js
+      "
+
 volumes:
   postgres_data:
