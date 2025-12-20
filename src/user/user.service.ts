@@ -22,7 +22,7 @@ export class UserService {
       data: {
         email: data.email,
         password: hashedPassword,
-        accounts: {
+        account: {
           create: {
             balance: 0,
           },
