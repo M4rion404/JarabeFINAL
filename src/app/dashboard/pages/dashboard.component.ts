@@ -2,10 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './login.html',
-  styleUrls: ['./login.css'],
+  template: `
+    <h1>Dashboard</h1>
+    <p>Bienvenido, estás autenticado 🎉</p>
+  `,
 })
-export class LoginComponent {}
+export class DashboardComponent {}
