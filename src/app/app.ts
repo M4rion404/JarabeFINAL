@@ -1,12 +1,16 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AuthService } from './auth/services/auth.service';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
+  standalone: true,
+  imports: [RouterOutlet, CommonModule],
+  templateUrl: './app.html', 
   styleUrl: './app.css'
 })
 export class AppComponent {
-  protected readonly title = signal('BANK-FRONTEND');
+   constructor(public auth: AuthService) {}
 }

@@ -1,0 +1,21 @@
+<app-navbar />
+
+@if (loading()) {
+  <p>Cargando dashboard...</p>
+}
+
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+}
+
+@if (!loading() && user()) {
+  <h2>Bienvenido {{ user()?.email}}</h2>
+  <p><strong>Email:</strong> {{ user()?.email }}</p>
+
+  <div class="card">
+    <h3>Saldo disponible</h3>
+    <p class="balance">$ {{ balance() | number:'1.2-2' }}</p>
+  </div>
+}
+
+
