@@ -17,7 +17,7 @@ import { TransferComponent } from '../../transactions/transfer/transfer';
   templateUrl: './dashboard.html',
 })
 export class DashboardComponent implements OnInit {
-  user = signal<{ email: string } | null>(null);
+  user = signal<{ name: string, email: string } | null>(null);
   balance = signal<number>(0);
   transactions = signal<Transaction[]>([]);
   loading = signal<boolean>(true);
