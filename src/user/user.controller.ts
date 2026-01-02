@@ -11,7 +11,11 @@ export class UserController {
   
   @Get('profile')
   getProfile(@Req() req) {
-    return req.user;
+    return {
+      id: req.user.id,
+      email: req.user.email,
+      name: req.user.name,
+    };
   }
 
   @Post('register')
