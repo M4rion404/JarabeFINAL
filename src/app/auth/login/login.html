@@ -1,23 +1,39 @@
-<h2>Login</h2>
+<div class="min-h-screen flex items-center justify-center bg-base-200">
+  <div class="card w-full max-w-sm shadow-xl bg-base-100">
+    <div class="card-body">
+      <h2 class="card-title justify-center text-2xl">Bank Login</h2>
 
-<form (ngSubmit)="login()">
-  <input
-    type="email"
-    placeholder="Email"
-    [(ngModel)]="email"
-    name="email"
-    required
-  />
+      <form (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Email</span>
+          </label>
+          <input
+            type="email"
+            class="input input-bordered"
+            [(ngModel)]="email"
+            name="email"
+            required
+          />
+        </div>
 
-  <input
-    type="password"
-    placeholder="Password"
-    [(ngModel)]="password"
-    name="password"
-    required
-  />
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Password</span>
+          </label>
+          <input
+            type="password"
+            class="input input-bordered"
+            [(ngModel)]="password"
+            name="password"
+            required
+          />
+        </div>
 
-  <button type="submit">Entrar</button>
-
-  <p style="color:red" *ngIf="error">{{ error }}</p>
-</form>
+        <button class="btn btn-primary w-full" type="submit">
+          Iniciar sesión
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

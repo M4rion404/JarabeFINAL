@@ -39,6 +39,10 @@ export const routes: Routes = [
     path: '**',
     redirectTo: 'login',
   },
+  {
+    path: 'transfer',
+    redirectTo: 'transactions/transfer',
+  }
 ];
 
 export class AppRoutes {}

@@ -8,26 +8,29 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './login.html',
+  templateUrl: './login.html'
 })
 export class LoginComponent {
   email = '';
   password = '';
   error = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router
+  ) {}
 
-  login() {
+  onSubmit() {
+    this.error = '';
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
         this.authService.saveToken(res.accessToken);
-        this.router.navigate(['/accounts']);
-        this.router.navigate(['/dashboard']);
-        localStorage.setItem('token', res.accessToken);
         console.log('Login exitoso');
+        this.router.navigate(['/dashboard']);
       },
-      error: () => {
-        this.error = 'Credenciales inválidas';
+      error: (err) => {
+        console.error(err);
+        this.error = 'Credenciales inválidas. Intenta de nuevo.';
       },
     });
   }

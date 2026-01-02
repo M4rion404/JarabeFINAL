@@ -1,11 +1,10 @@
 import { Routes } from '@angular/router';
+import { TransferComponent } from './transfer/transfer';
 
 export const TRANSACTIONS_ROUTES: Routes = [
-//   {
-//     path: '',
-//     loadComponent: () =>
-//       import('./pages/transactions/transactions.component').then(
-//         m => m.TransactionsComponent
-//       ),
-//   },
+  {
+    path: 'transfer',
+    component: TransferComponent,
+  },
 ];
+

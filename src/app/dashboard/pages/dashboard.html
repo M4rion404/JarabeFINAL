@@ -1,21 +1,121 @@
 <app-navbar />
 
-@if (loading()) {
-  <p>Cargando dashboard...</p>
-}
+<div class="p-6 bg-base-200 min-h-screen">
+  <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
 
-@if (error()) {
-  <p class="error">{{ error() }}</p>
-}
-
-@if (!loading() && user()) {
-  <h2>Bienvenido {{ user()?.email}}</h2>
-  <p><strong>Email:</strong> {{ user()?.email }}</p>
-
-  <div class="card">
-    <h3>Saldo disponible</h3>
-    <p class="balance">$ {{ balance() | number:'1.2-2' }}</p>
+  @if (loading()) {
+  <div class="flex justify-center items-center h-40">
+    <span class="loading loading-spinner loading-lg"></span>
   </div>
-}
+  } @else if (error()) {
+  <div class="alert alert-error shadow-lg">
+    {{ error() }}
+  </div>
+  } @else {
 
+  <!-- CARDS SUPERIORES -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Saldo -->
+    <div class="card bg-base-100 shadow">
+      <div class="card-body">
+        <h2 class="card-title">Saldo actual</h2>
+        <p class="text-3xl font-bold text-green-600">${{ balance() | number : '1.2-2' }}</p>
+      </div>
+    </div>
 
+    <!-- Usuario -->
+    <div class="card bg-base-100 shadow">
+      <div class="card-body">
+        <h2 class="card-title">Usuario</h2>
+        <p>{{ user()?.email }}</p>
+        <p class="opacity-70">Cuenta principal</p>
+      </div>
+    </div>
+
+    <!-- Movimientos -->
+    <div class="card bg-base-100 shadow">
+      <div class="card-body">
+        <h2 class="card-title">Movimientos</h2>
+        <p class="opacity-70">Total registrados</p>
+        <p class="text-xl font-semibold">
+          {{ transactions().length }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLA DE MOVIMIENTOS (FULL WIDTH) -->
+  <div class="mt-10 card bg-base-100 shadow w-full">
+    <div class="card-body">
+      <h2 class="card-title mb-4">Últimos movimientos</h2>
+
+      @if (transactions().length === 0) {
+      <p class="opacity-70">No hay movimientos registrados</p>
+      } @else {
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th class="text-right">Monto</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (tx of transactions(); track tx.id) {
+            <tr>
+              <!-- Fecha -->
+              <td>
+                {{ tx.createdAt | date : 'short' }}
+              </td>
+
+              <!-- Tipo -->
+              <td>
+                <span
+                  class="px-3 py-1 rounded-full text-sm font-semibold"
+                  [ngClass]="{
+                    'bg-green-100 text-green-700': tx.type === 'IN',
+                    'bg-red-100 text-red-700': tx.type === 'OUT'
+                  }"
+                >
+                  {{ tx.type === 'IN' ? 'Depósito' : 'Transferencia' }}
+                </span>
+              </td>
+
+              <!-- Monto -->
+              <td
+                class="text-right font-semibold"
+                [ngClass]="{
+                  'text-green-600': tx.type === 'INCOME',
+                  'text-red-600': tx.type === 'TRANSFER'
+                }"
+              >
+                ${{ tx.amount | number : '1.2-2' }}
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
+    </div>
+    <button class="btn btn-primary" (click)="openTransfer()">Nueva transferencia</button>
+  </div>
+
+  @if (showTransferModal()) {
+  <div class="modal modal-open">
+    <div class="modal-box max-w-lg">
+      <h3 class="font-bold text-lg mb-4">Transferencia bancaria</h3>
+
+      <app-transfer (completed)="onTransferCompleted()"/>
+
+      <div class="modal-action">
+        <button class="btn" (click)="showTransferModal.set(false)">Cerrar</button>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" (click)="closeTransfer()"></div>
+  </div>
+  } }
+</div>
