@@ -23,16 +23,28 @@
       </div>
     </div>
 
-    <!-- Usuario -->
-    <div class="card bg-base-100 shadow">
+    <div class="card bg-base-100 shadow border-primary">
       <div class="card-body">
-        <h2 class="card-title">Usuario</h2>
-        <p>{{ user()?.name }}</p>
-        <p>{{ user()?.email }}</p>
-        <p class="opacity-70">Cuenta principal</p>
+        <div class="flex items-center gap-4">
+          <div class="avatar placeholder">
+            <div class="bg-neutral text-neutral-content rounded-full w-12">
+              <span class="text-xl">{{ user()?.name?.charAt(0) || 'U' }}</span>
+            </div>
+          </div>
+
+          <div>
+            <h2 class="card-title text-sm opacity-70 uppercase">{{ user()?.email }}</h2>
+            <p class="text-lg font-bold leading-none">{{ user()?.name }}</p>
+            <p class="text-sm opacity-60">{{ user()?.email }}</p>
+          </div>
+        </div>
+
+        <div class="card-actions justify-end mt-2">
+          <div class="badge badge-ghost text-xs">Cuenta Principal</div>
+        </div>
       </div>
     </div>
-
+    
     <!-- Movimientos -->
     <div class="card bg-base-100 shadow">
       <div class="card-body">
@@ -59,7 +71,7 @@
             <tr>
               <th>Fecha</th>
               <th>Tipo</th>
-              <th>Cuenta</th>
+              <th>Destino</th>
               <th class="text-right">Monto</th>
             </tr>
           </thead>
@@ -85,25 +97,18 @@
                 </span>
               </td>
 
-              <!-- Cuenta -->
+              <!-- Contraparte -->
               <td>
-                <span
-                  class="px-3 py-1 rounded-full text-sm font-semibold"
-                >
-                  <!-- {{ user()?.email }} -->
-                </span>
+                <div class="font-medium">
+                  {{ tx.counterparty.name || tx.counterparty.email }}
+                </div>
+                <div class="text-xs opacity-60">
+                  {{ tx.counterparty.email }}
+                </div>
               </td>
 
               <!-- Monto -->
-              <td
-                class="text-right font-semibold"
-                [ngClass]="{
-                  'text-green-600': tx.type === 'INCOME',
-                  'text-red-600': tx.type === 'TRANSFER'
-                }"
-              >
-                ${{ tx.amount | number : '1.2-2' }}
-              </td>
+              <td class="text-right font-semibold">${{ tx.amount | number : '1.2-2' }}</td>
             </tr>
             }
           </tbody>
@@ -119,7 +124,7 @@
     <div class="modal-box max-w-lg">
       <h3 class="font-bold text-lg mb-4">Transferencia bancaria</h3>
 
-      <app-transfer (completed)="onTransferCompleted()"/>
+      <app-transfer (completed)="onTransferCompleted()" />
 
       <div class="modal-action">
         <button class="btn" (click)="showTransferModal.set(false)">Cerrar</button>

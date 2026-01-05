@@ -5,7 +5,11 @@ import { Observable } from 'rxjs';
 export interface Transaction {
   id: string;
   amount: number;
-  type: string;
+  type: 'IN' | 'OUT';
+  counterparty: {
+    name: string;
+    email: string;
+  };
   createdAt: string;
 }
 

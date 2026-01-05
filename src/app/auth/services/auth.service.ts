@@ -20,6 +20,13 @@ export class AuthService {
       password,
     });
   }
+  register(name: string, email: string, password: string) {
+    return this.http.post(`${this.API_URL.replace('/auth', '/users')}/register`, {
+      name,
+      email,
+      password,
+    });
+  }
   saveToken(token: string): void {
     localStorage.setItem('access_token', token);
   }
@@ -28,7 +35,7 @@ export class AuthService {
     return localStorage.getItem('access_token');
   }
 
-  logout(){
+  logout() {
     localStorage.removeItem('access_token');
   }
 
@@ -36,4 +43,3 @@ export class AuthService {
     return !!this.getToken();
   }
 }
-
