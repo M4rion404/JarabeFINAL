@@ -1,56 +1,80 @@
-<div class="max-w-md mx-auto mt-10">
-  <div class="card bg-base-100 shadow-lg">
-    <div class="card-body">
+<form class="space-y-4" (ngSubmit)="submit()">
+  <!-- EMAIL DESTINO -->
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Correo del destinatario</span>
+    </label>
 
-      <!-- Error -->
-      @if (error()) {
-        <div class="alert alert-error mb-3">
-          {{ error() }}
-        </div>
+    <input
+      type="email"
+      class="input input-bordered w-full"
+      placeholder="usuario@email.com"
+      [value]="toEmail()"
+      (input)="toEmail.set($any($event.target).value)"
+      [disabled]="loading()"
+    />
+
+    <label class="label">
+      <span class="label-text-alt opacity-60">
+        No puede ser tu propio correo
+      </span>
+    </label>
+  </div>
+
+  <!-- MONTO -->
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Monto</span>
+    </label>
+
+    <input
+      type="number"
+      class="input input-bordered w-full"
+      placeholder="0.00"
+      min="1"
+      [value]="amount()"
+      (input)="amount.set($any($event.target).valueAsNumber)"
+      [disabled]="loading()"
+    />
+  </div>
+
+  <!-- ERROR -->
+  @if (error()) {
+    <div class="alert alert-error">
+      {{ error() }}
+    </div>
+  }
+
+  <!-- SUCCESS (inline feedback) -->
+  @if (success()) {
+    <div class="alert alert-success">
+      Transferencia realizada correctamente
+    </div>
+  }
+
+  <!-- ACTIONS -->
+  <div class="flex justify-end gap-2 pt-4">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="loading()"
+    >
+      @if (loading()) {
+        <span class="loading loading-spinner loading-sm"></span>
+      } @else {
+        Transferir
       }
+    </button>
+  </div>
+</form>
 
-      <!-- Éxito -->
-      @if (success()) {
-        <div class="alert alert-success mb-3">
-          Transferencia realizada con éxito
-        </div>
-      }
-
-      <!-- Cuenta destino -->
-      <label class="label">
-        <span class="label-text">Cuenta destino</span>
-      </label>
-      <input
-        class="input input-bordered w-full mb-4"
-        placeholder="Ej. cuenta1@bot.com"
-        (input)="toEmail.set($any($event.target).value)"
-      />
-
-      <!-- Monto -->
-      <label class="label">
-        <span class="label-text">Monto</span>
-      </label>
-      <input
-        type="number"
-        class="input input-bordered w-full mb-6"
-        placeholder="Ej. 500"
-        (input)="amount.set($any($event.target).valueAsNumber)"
-      />
-
-      <!-- Botón -->
-      <button
-        class="btn btn-primary w-full"
-        [disabled]="loading()"
-        (click)="submit()"
-      >
-        @if (loading()) {
-          <span class="loading loading-spinner"></span>
-        } @else {
-          Transferir
-        }
-      </button>
-
+<!-- TOAST -->
+@if (success()) {
+  <div class="toast toast-top toast-end z-50">
+    <div class="alert alert-success shadow-lg">
+      <span>💸 Transferencia realizada con éxito</span>
     </div>
   </div>
-</div>
+}
+
 

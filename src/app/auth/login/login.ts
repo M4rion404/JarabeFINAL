@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { NotificationService } from '../../shared/services/notification.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login.html',
 })
 export class LoginComponent {
@@ -19,6 +21,7 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private notifications: NotificationService,
     private toastr: ToastrService
   ) {}
 
@@ -27,14 +30,16 @@ export class LoginComponent {
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
         this.authService.saveToken(res.accessToken);
-        this.onLoginSuccess();
+        this.notifications.success('Bienvenido 🎉', 'Login exitoso');
+        // this.onLoginSuccess();
         console.log('Login exitoso');
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         console.error(err);
-        this.onLoginError();
-        this.error = 'Credenciales inválidas. Intenta de nuevo.';
+        this.notifications.error('Correo o contraseña incorrectos', 'Favor de intentarlo de nuevo');
+        // this.onLoginError();
+        // this.error = 'Credenciales inválidas. Intenta de nuevo.';
       },
     });
   }

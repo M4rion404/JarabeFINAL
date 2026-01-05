@@ -1,4 +1,4 @@
-import { Component, signal, EventEmitter, Output } from '@angular/core';
+import { Component, signal, EventEmitter, Output, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../services/transaction.service';
@@ -14,17 +14,27 @@ export class TransferComponent {
   toEmail = signal('');
   amount = signal<number | null>(null);
 
+  // 📥 Correo del usuario actual (para validación)
+  @Input({ required: true }) currentUserEmail!: string;
+
   // 🎯 Estados UX
   loading = signal(false);
   error = signal<string | null>(null);
   success = signal(false);
 
+  @Output() completed = new EventEmitter<void>();
+
   constructor(private transactionService: TransactionService) {}
 
   submit(): void {
-    // ❌ Validaciones frontend
+    // ❌ Validaciones
     if (!this.toEmail()) {
       this.error.set('La cuenta destino es obligatoria');
+      return;
+    }
+
+    if (this.toEmail() === this.currentUserEmail) {
+      this.error.set('No puedes transferirte a ti mismo');
       return;
     }
 
@@ -34,25 +44,20 @@ export class TransferComponent {
       return;
     }
 
-    // 🔄 Estados visuales
+    // 🔄 Estados
     this.loading.set(true);
     this.error.set(null);
     this.success.set(false);
 
-    const payload = {
-      toEmail: this.toEmail(),
-      amount: Number(this.amount()),
-    };
-
-    console.log('TRANSFER PAYLOAD:', payload);
-
-    this.transactionService.transfer(Number(this.amount()!), this.toEmail()).subscribe({
+    this.transactionService.transfer(amount, this.toEmail()).subscribe({
       next: () => {
         this.success.set(true);
         this.loading.set(false);
-        this.completed.emit();
-        payload.amount,
-        payload.toEmail
+
+        // ⏱️ AUTO CIERRE DEL MODAL
+        setTimeout(() => {
+          this.completed.emit();
+        }, 1500);
       },
       error: () => {
         this.error.set('No se pudo realizar la transferencia');
@@ -60,5 +65,4 @@ export class TransferComponent {
       },
     });
   }
-  @Output() completed = new EventEmitter<void>();
 }

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../auth/services/auth.service';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { NotificationService } from '../../shared/services/notification.service';
 
 @Component({
   standalone: true,
@@ -22,6 +23,7 @@ export class RegisterComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private notifications: NotificationService,
     private toastr: ToastrService
   ) {}
 
@@ -38,10 +40,12 @@ export class RegisterComponent {
         this.authService.login(this.email(), this.password()).subscribe({
           next: (res) => {
             this.authService.saveToken(res.accessToken);
+            this.notifications.success('Cuenta creada correctamente');
             this.router.navigate(['/dashboard']);
           },
-          error: () => {
-            this.error.set('Error al iniciar sesión');
+          error: (err) => {
+            this.notifications.error(
+              err.error?.message || 'Error al iniciar sesión después del registro');
             this.loading.set(false);
           },
         });

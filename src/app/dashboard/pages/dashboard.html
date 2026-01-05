@@ -1,17 +1,35 @@
+@if (loading()) {
+<!-- SKELETON DASHBOARD -->
+<div class="p-6 space-y-6">
+  <div class="skeleton h-20 w-full"></div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="skeleton h-32"></div>
+    <div class="skeleton h-32"></div>
+    <div class="skeleton h-32"></div>
+  </div>
+
+  <div class="skeleton h-40 w-full"></div>
+</div>
+
+} @else if (error()) {
+
+<!-- ERROR STATE -->
 <app-navbar />
 
-<div class="p-6 bg-base-200 min-h-screen">
-  <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
-
-  @if (loading()) {
-  <div class="flex justify-center items-center h-40">
-    <span class="loading loading-spinner loading-lg"></span>
-  </div>
-  } @else if (error()) {
+<div class="p-6">
   <div class="alert alert-error shadow-lg">
     {{ error() }}
   </div>
-  } @else {
+</div>
+
+} @else {
+
+<!-- DASHBOARD REAL -->
+<app-navbar />
+
+<div class="p-6 bg-base-200 min-h-screen space-y-8">
+  <h1 class="text-2xl font-bold">Dashboard</h1>
 
   <!-- CARDS SUPERIORES -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -23,33 +41,36 @@
       </div>
     </div>
 
+    <!-- Usuario -->
     <div class="card bg-base-100 shadow border-primary">
       <div class="card-body">
         <div class="flex items-center gap-4">
           <div class="avatar placeholder">
             <div class="bg-neutral text-neutral-content rounded-full w-12">
-              <span class="text-xl">{{ user()?.name?.charAt(0) || 'U' }}</span>
+              <span class="text-xl">
+                {{ user()?.name?.charAt(0) || 'U' }}
+              </span>
             </div>
           </div>
 
           <div>
-            <h2 class="card-title text-sm opacity-70 uppercase">{{ user()?.email }}</h2>
-            <p class="text-lg font-bold leading-none">{{ user()?.name }}</p>
-            <p class="text-sm opacity-60">{{ user()?.email }}</p>
+            <!-- <pre class="text-xs bg-black text-green-400 p-2">{{ user() | json }}</pre> -->
+            <!-- <h2 class="card-title text-sm opacity-70 uppercase mb-0">{{ user()?.name }}</h2> -->
+            <p class="text-lg font-bold leading-tight">{{ user()?.name }}</p>
+            <p class="text-xs opacity-60">{{ user()?.email }}</p>
           </div>
         </div>
 
-        <div class="card-actions justify-end mt-2">
-          <div class="badge badge-ghost text-xs">Cuenta Principal</div>
+        <div class="card-actions justify-end mt-4">
+          <div class="badge badge-ghost text-xs py-3 border-base-300">Cuenta Principal</div>
         </div>
       </div>
     </div>
-    
+
     <!-- Movimientos -->
     <div class="card bg-base-100 shadow">
       <div class="card-body">
         <h2 class="card-title">Movimientos</h2>
-        <p class="opacity-70">Total registrados</p>
         <p class="text-xl font-semibold">
           {{ transactions().length }}
         </p>
@@ -57,8 +78,80 @@
     </div>
   </div>
 
-  <!-- TABLA DE MOVIMIENTOS (FULL WIDTH) -->
-  <div class="mt-10 card bg-base-100 shadow w-full">
+  <!--Tarjeta Visible-->
+  <a href="#" class="hover-3d my-12 mx-2 cursor-pointer px-80">
+    <!-- content -->
+    <div
+      class="card w-96 bg-black text-white bg-[radial-gradient(circle_at_bottom_left,#ffffff04_35%,transparent_36%),radial-gradient(circle_at_top_right,#ffffff04_35%,transparent_36%)] bg-size-[4.95em_4.95em]"
+    >
+      <div class="card-body">
+        <div class="flex justify-between mb-10">
+          <div class="font-bold">BAnco Bueno</div>
+          <div class="text-5xl opacity-10">❁</div>
+        </div>
+        <div class="text-lg mb-4 opacity-40">0210 8820 1150 0222</div>
+        <div class="flex justify-between">
+          <div>
+            <div class="text-xs opacity-20">CARD HOLDER</div>
+            <div>{{ user().name | uppercase }}</div>
+          </div>
+          <div>
+            <div class="text-xs opacity-20">EXPIRES</div>
+            <div>29/08</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 empty divs needed for the 3D effect -->
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </a>
+
+  <!--Tarjeta Visible-->
+  <a href="#" class="hover-3d my-12 mx-2 cursor-pointer">
+    <!-- content -->
+    <div
+      class="card w-96 bg-gray-900 text-white bg-[radial-gradient(circle_at_bottom_left,#ffffff04_35%,transparent_36%),radial-gradient(circle_at_top_right,#ffffff04_35%,transparent_36%)] bg-size-[4.95em_4.95em]"
+    >
+      <div class="card-body">
+        <div class="flex justify-between mb-10">
+          <div class="font-bold">BAnco Bueno</div>
+          <div class="text-5xl opacity-10">❁</div>
+        </div>
+        <div class="text-lg mb-4 opacity-40">0130 7620 1150 0333</div>
+        <div class="flex justify-between">
+          <div>
+            <div class="text-xs opacity-20">CARD HOLDER</div>
+            <div>{{ user().name | uppercase }}</div>
+          </div>
+          <div>
+            <div class="text-xs opacity-20">EXPIRES</div>
+            <div>29/08</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 empty divs needed for the 3D effect -->
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </a>
+
+  <!-- TABLA DE MOVIMIENTOS -->
+  <div class="card bg-base-100 shadow-md w-full shadow-accent">
     <div class="card-body">
       <h2 class="card-title mb-4">Últimos movimientos</h2>
 
@@ -79,12 +172,8 @@
           <tbody>
             @for (tx of transactions(); track tx.id) {
             <tr>
-              <!-- Fecha -->
-              <td>
-                {{ tx.createdAt | date : 'short' }}
-              </td>
+              <td>{{ tx.createdAt | date : 'short' }}</td>
 
-              <!-- Tipo -->
               <td>
                 <span
                   class="px-3 py-1 rounded-full text-sm font-semibold"
@@ -97,7 +186,6 @@
                 </span>
               </td>
 
-              <!-- Contraparte -->
               <td>
                 <div class="font-medium">
                   {{ tx.counterparty.name || tx.counterparty.email }}
@@ -107,7 +195,6 @@
                 </div>
               </td>
 
-              <!-- Monto -->
               <td class="text-right font-semibold">${{ tx.amount | number : '1.2-2' }}</td>
             </tr>
             }
@@ -116,22 +203,25 @@
       </div>
       }
     </div>
-    <button class="btn btn-primary" (click)="openTransfer()">Nueva transferencia</button>
+
+    <button class="btn btn-primary m-4" (click)="openTransfer()">Nueva transferencia</button>
   </div>
 
+  <!-- MODAL TRANSFERENCIA -->
   @if (showTransferModal()) {
   <div class="modal modal-open">
     <div class="modal-box max-w-lg">
       <h3 class="font-bold text-lg mb-4">Transferencia bancaria</h3>
 
-      <app-transfer (completed)="onTransferCompleted()" />
+      <app-transfer [currentUserEmail]="user()?.email" (completed)="onTransferCompleted()" />
 
       <div class="modal-action">
-        <button class="btn" (click)="showTransferModal.set(false)">Cerrar</button>
+        <button class="btn" (click)="closeTransfer()">Cerrar</button>
       </div>
     </div>
 
     <div class="modal-backdrop" (click)="closeTransfer()"></div>
   </div>
-  } }
+  }
 </div>
+}
