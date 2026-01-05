@@ -9,7 +9,7 @@ export class AccountsController {
 
   @Get('balance')
   getBalance(@Req() req) {
-    return this.accountsService.getBalance(req.user.userId);
+    return this.accountsService.getBalance(req.user.id);
   }
 
   @Post('deposit')

@@ -19,13 +19,13 @@ export class TransactionsController {
 
   @Get()
   async getMyTransactions(@Req() req, @Query() filters: TransactionFilterDto) {
-    return this.transactionsService.getHistory(req.user.userId, filters);
+    return this.transactionsService.getHistory(req.user.id, filters);
   }
 
   @Post('transfer')
   transfer(@Req() req, @Body() dto: TransferDto) {
     return this.transactionsService.transfer(
-      req.user.userId,
+      req.user.id,
       dto.toEmail,
       dto.amount,
     );

@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../Prisma/PrismaService';
 import { Prisma } from '@prisma/client';
 import { TransactionFilterDto } from './dto/transaction-filter.dto';
@@ -82,10 +86,7 @@ export class TransactionsService {
     }
 
     let whereCondition: any = {
-      OR: [
-        { fromAccountId: account.id },
-        { toAccountId: account.id },
-      ],
+      OR: [{ fromAccountId: account.id }, { toAccountId: account.id }],
     };
 
     if (filters.type === 'IN') {
@@ -103,21 +104,43 @@ export class TransactionsService {
     const transactions = await this.prisma.transaction.findMany({
       where: whereCondition,
       orderBy: { createdAt: 'desc' },
+      include: {
+        fromAccount: {
+          include: {
+            user: {
+              select: { email: true, name: true },
+            },
+          },
+        },
+        toAccount: {
+          include: {
+            user: {
+              select: { email: true, name: true },
+            },
+          },
+        },
+      },
     });
+    return transactions.map((tx) => {
+      const isOutgoing = tx.fromAccountId === account.id;
 
-    return transactions.map((tx) => ({
-      id: tx.id,
-      amount: tx.amount,
-      type: tx.fromAccountId === account.id ? 'OUT' : 'IN',
-      counterpartyAccountId:
-        tx.fromAccountId === account.id
-          ? tx.toAccountId
-          : tx.fromAccountId,
-      createdAt: tx.createdAt,
-    }));
+      const counterpartyAccount = isOutgoing ? tx.toAccount : tx.fromAccount;
+
+      const counterpartyUser = counterpartyAccount?.user;
+
+      return {
+        id: tx.id,
+        amount: tx.amount,
+        type: isOutgoing ? 'OUT' : 'IN',
+        counterparty: {
+
+          name:
+            counterpartyUser?.name ??
+            (isOutgoing ? 'Destinatario desconocido' : 'Depósito Externo'),
+          email: counterpartyUser?.email ?? 'N/A',
+        },
+        createdAt: tx.createdAt,
+      };
+    });
   }
 }
-
-
-
-  

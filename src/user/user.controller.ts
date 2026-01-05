@@ -10,7 +10,8 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   
   @Get('profile')
-  getProfile(@Req() req) {
+  async getProfile(@Req() req) {
+    const user = await this.userService.findById(req.user.id);
     return {
       id: req.user.id,
       email: req.user.email,
