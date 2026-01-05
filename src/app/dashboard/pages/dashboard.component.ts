@@ -11,88 +11,84 @@ import { TransferComponent } from '../../transactions/transfer/transfer';
 import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [
-    CommonModule,
-    NavbarComponent,
-    DecimalPipe,
-    DatePipe,
-    NgClass,
-    TransferComponent,
-    UpperCasePipe,
-  ],
-  templateUrl: './dashboard.html',
+    selector: 'app-dashboard',
+    standalone: true,
+    imports: [
+        CommonModule,
+        NavbarComponent,
+        DecimalPipe,
+        DatePipe,
+        NgClass,
+        TransferComponent,
+        UpperCasePipe,
+    ],
+    templateUrl: './dashboard.html',
 })
+export class DashboardComponent implements OnInit 
+{
+    private authService = inject(AuthService);
+    
+    public currentUser = this.authService.user;
+    public accountBalance = signal<number>(0);
+    public transactionHistory = signal<Transaction[]>([]);
+    public isLoading = signal<boolean>(true);
+    public errorMessage = signal<string | null>(null);
+    public isTransferModalVisible = signal(false);
 
-export class DashboardComponent implements OnInit {
-  // user = signal<{ name: string; email: string } | null>(null);
-  private authService = inject(AuthService);
-  user = this.authService.user;
-  balance = signal<number>(0);
-  transactions = signal<Transaction[]>([]);
-  loading = signal<boolean>(true);
-  error = signal<string | null>(null);
+    constructor(
+        private readonly userService: UserService,
+        private readonly accountService: AccountService,
+        private readonly transactionService: TransactionService
+    ) {}
 
-  showTransferModal = signal(false);
- 
-  
+    public ngOnInit(): void 
+    {
+        this.LoadDashboardData();
+    }
 
-  constructor(
-    private readonly userService: UserService,
-    private readonly accountService: AccountService,
-    private readonly transactionService: TransactionService
-  ) {}
+    public LoadDashboardData(): void 
+    {
+        this.isLoading.set(true);
+        this.errorMessage.set(null);
 
-  ngOnInit(): void {
-    this.loadDashboard();
-  }
+        forkJoin({
+            balanceData: this.accountService
+                .GetBalance()
+                .pipe(catchError(() => of({ balance: 0 }))),
+            transactionsData: this.transactionService
+                .GetTransactions()
+                .pipe(catchError(() => of([]))),
+        })
+        // ⏱️ Artificial delay to visualize the skeleton loader
+        .pipe(delay(1200))
+        .subscribe({
+            next: (dashboardData) => 
+            {
+                this.accountBalance.set(dashboardData.balanceData.balance);
+                this.transactionHistory.set(dashboardData.transactionsData);
+                this.isLoading.set(false);
+            },
+            error: () => 
+            {
+                this.errorMessage.set('Unexpected error while loading dashboard');
+                this.isLoading.set(false);
+            },
+        });
+    }
 
-  loadDashboard(): void {
-    this.loading.set(true);
-    this.error.set(null);
+    public OpenTransferModal(): void 
+    {
+        this.isTransferModalVisible.set(true);
+    }
 
-    forkJoin({
-      // user: this.userService.getProfile().pipe(catchError(() => of(null))),
-      balance: this.accountService
-        .getBalance()
-        .pipe(catchError(() => of({ balance: 0 }))),
-      transactions: this.transactionService
-        .getTransactions()
-        .pipe(catchError(() => of([]))),
-    })
-      // ⏱️ delay SOLO para ver el skeleton (quítalo en prod)
-      .pipe(delay(1200))
-      .subscribe({
-        next: (res) => {
-          // if (!res.user) {
-          //   this.error.set('No se pudo cargar el perfil del usuario');
-          //   this.loading.set(false);
-          //   return;
-          // }
+    public CloseTransferModal(): void 
+    {
+        this.isTransferModalVisible.set(false);
+    }
 
-          // this.user.set(res.user);
-          this.balance.set(res.balance.balance);
-          this.transactions.set(res.transactions);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.error.set('Error inesperado al cargar el dashboard');
-          this.loading.set(false);
-        },
-      });
-  }
-
-  openTransfer(): void {
-    this.showTransferModal.set(true);
-  }
-
-  closeTransfer(): void {
-    this.showTransferModal.set(false);
-  }
-
-  onTransferCompleted(): void {
-    this.showTransferModal.set(false);
-    this.loadDashboard();
-  }
+    public OnTransferCompleted(): void 
+    {
+        this.isTransferModalVisible.set(false);
+        this.LoadDashboardData();
+    }
 }

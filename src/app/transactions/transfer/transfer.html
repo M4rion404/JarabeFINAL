@@ -1,80 +1,82 @@
-<form class="space-y-4" (ngSubmit)="submit()">
-  <!-- EMAIL DESTINO -->
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">Correo del destinatario</span>
-    </label>
+<form id="TransferForm" class="space-y-4" (ngSubmit)="OnSubmit()">
+    
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Recipient Email</span>
+        </label>
 
-    <input
-      type="email"
-      class="input input-bordered w-full"
-      placeholder="usuario@email.com"
-      [value]="toEmail()"
-      (input)="toEmail.set($any($event.target).value)"
-      [disabled]="loading()"
-    />
+        <input
+            id="RecipientEmailInput"
+            type="email"
+            class="input input-bordered w-full"
+            placeholder="user@email.com"
+            [value]="targetEmail()"
+            (input)="targetEmail.set($any($event.target).value)"
+            [disabled]="isLoading()"
+        />
 
-    <label class="label">
-      <span class="label-text-alt opacity-60">
-        No puede ser tu propio correo
-      </span>
-    </label>
-  </div>
-
-  <!-- MONTO -->
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">Monto</span>
-    </label>
-
-    <input
-      type="number"
-      class="input input-bordered w-full"
-      placeholder="0.00"
-      min="1"
-      [value]="amount()"
-      (input)="amount.set($any($event.target).valueAsNumber)"
-      [disabled]="loading()"
-    />
-  </div>
-
-  <!-- ERROR -->
-  @if (error()) {
-    <div class="alert alert-error">
-      {{ error() }}
+        <label class="label">
+            <span class="label-text-alt opacity-60">
+                It cannot be your own email address
+            </span>
+        </label>
     </div>
-  }
 
-  <!-- SUCCESS (inline feedback) -->
-  @if (success()) {
-    <div class="alert alert-success">
-      Transferencia realizada correctamente
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">Amount</span>
+        </label>
+
+        <input
+            id="TransferAmountInput"
+            type="number"
+            class="input input-bordered w-full"
+            placeholder="0.00"
+            min="1"
+            [value]="transferAmount()"
+            (input)="transferAmount.set($any($event.target).valueAsNumber)"
+            [disabled]="isLoading()"
+        />
     </div>
-  }
 
-  <!-- ACTIONS -->
-  <div class="flex justify-end gap-2 pt-4">
-    <button
-      type="submit"
-      class="btn btn-primary"
-      [disabled]="loading()"
-    >
-      @if (loading()) {
-        <span class="loading loading-spinner loading-sm"></span>
-      } @else {
-        Transferir
-      }
-    </button>
-  </div>
+    @if (errorMessage()) 
+    {
+        <div id="TransferErrorAlert" class="alert alert-error">
+            {{ errorMessage() }}
+        </div>
+    }
+
+    @if (isTransferSuccessful()) 
+    {
+        <div id="TransferSuccessAlert" class="alert alert-success">
+            Transfer completed successfully
+        </div>
+    }
+
+    <div class="flex justify-end gap-2 pt-4">
+        <button
+            id="ConfirmTransferButton"
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isLoading()"
+        >
+            @if (isLoading()) 
+            {
+                <span class="loading loading-spinner loading-sm"></span>
+            } 
+            @else 
+            {
+                Transfer Funds
+            }
+        </button>
+    </div>
 </form>
 
-<!-- TOAST -->
-@if (success()) {
-  <div class="toast toast-top toast-end z-50">
-    <div class="alert alert-success shadow-lg">
-      <span>💸 Transferencia realizada con éxito</span>
+@if (isTransferSuccessful()) 
+{
+    <div id="SuccessToastNotification" class="toast toast-top toast-end z-50">
+        <div class="alert alert-success shadow-lg">
+            <span>💸 Transfer successful</span>
+        </div>
     </div>
-  </div>
 }
-
-

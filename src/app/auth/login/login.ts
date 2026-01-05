@@ -8,47 +8,51 @@ import { NotificationService } from '../../shared/services/notification.service'
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './login.html',
+    selector: 'app-login',
+    standalone: true,
+    imports: [CommonModule, FormsModule, RouterLink],
+    templateUrl: './login.html',
 })
-export class LoginComponent {
-  email = '';
-  password = '';
-  error = '';
+export class LoginComponent 
+{
+    public email = '';
+    public password = '';
+    public errorMessage = '';
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private notifications: NotificationService,
-    private toastr: ToastrService
-  ) {}
+    constructor(
+        private authService: AuthService,
+        private router: Router,
+        private notifications: NotificationService,
+        private toastr: ToastrService
+    ) {}
 
-  onSubmit() {
-    this.error = '';
-    this.authService.login(this.email, this.password).subscribe({
-      next: (res) => {
-        this.authService.saveToken(res.accessToken);
-        this.notifications.success('Bienvenido 🎉', 'Login exitoso');
-        // this.onLoginSuccess();
-        console.log('Login exitoso');
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err) => {
-        console.error(err);
-        this.notifications.error('Correo o contraseña incorrectos', 'Favor de intentarlo de nuevo');
-        // this.onLoginError();
-        // this.error = 'Credenciales inválidas. Intenta de nuevo.';
-      },
-    });
-  }
+    public OnSubmit() 
+    {
+        this.errorMessage = '';
+        this.authService.Login(this.email, this.password).subscribe({
+            next: response => {
+                this.authService.SaveToken(response.accessToken);
+                this.notifications.success('Welcome 🎉', 'Successful login');
+                
+                console.log('Successful login');
+                this.router.navigate(['/dashboard']);
+            },
+            error: errorResponse => {
+                console.error(errorResponse);
+                this.notifications.error('Incorrect email or password', 'Please try again');
+                
+                this.errorMessage = 'Invalid credentials. Please try again.';
+            },
+        });
+    }
 
-  onLoginSuccess() {
-    this.toastr.success('Bienvenido 🎉', 'Login exitoso');
-  }
+    public OnLoginSuccess() 
+    {
+        this.toastr.success('Welcome 🎉', 'Successful login');
+    }
 
-  onLoginError() {
-    this.toastr.error('Correo o contraseña incorrectos', 'Error');
-  }
+    public OnLoginError() 
+    {
+        this.toastr.error('Incorrect email or password', 'Error');
+    }
 }

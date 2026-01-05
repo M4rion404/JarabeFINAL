@@ -1,75 +1,81 @@
-<div class="min-h-screen flex items-center justify-center bg-linear-to-br from-base-200 to-base-300 px-4">
-  <div class="card w-full max-w-md shadow-2xl bg-base-100 border border-base-300">
-    <div class="card-body p-8">
-      
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary text-primary-content mb-4 shadow-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-          </svg>
+<div id="MainContainer" class="min-h-screen flex items-center justify-center bg-linear-to-br from-base-200 to-base-300 px-4">
+    <div id="LoginCard" class="card w-full max-w-md shadow-2xl bg-base-100 border border-base-300">
+        <div class="card-body p-8">
+            
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary text-primary-content mb-4 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-extrabold tracking-tight">GoodBank</h2>
+                <p class="text-base-content/60 mt-2">Welcome back, please enter your details</p>
+            </div>
+
+            <form id="LoginForm" (ngSubmit)="OnSubmit()" class="space-y-5">
+                
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text font-semibold">Email Address</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-base-content/40">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                            </svg>
+                        </span>
+                        <input
+                            id="EmailInput"
+                            type="email"
+                            placeholder="name@example.com"
+                            class="input input-bordered w-full pl-10 focus:input-primary transition-all"
+                            [(ngModel)]="email"
+                            name="email"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="form-control w-full">
+                    <div class="flex justify-between items-end mb-1">
+                        <label class="label p-0">
+                            <span class="label-text font-semibold">Password</span>
+                        </label>
+                        <a href="#" class="text-xs link link-primary no-underline hover:underline">Forgot your password?</a>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-base-content/40">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </span>
+                        <input
+                            id="PasswordInput"
+                            type="password"
+                            placeholder="••••••••"
+                            class="input input-bordered w-full pl-10 focus:input-primary transition-all"
+                            [(ngModel)]="password"
+                            name="password"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="form-control mt-6">
+                    <button id="SignInButton" class="btn btn-primary w-full shadow-lg group" type="submit">
+                        <span>Sign In</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <p class="text-center text-sm text-base-content/60 mt-4">
+                    Don't have an account? 
+                    <a id="RegisterLink" routerLink="/register" class="link link-primary font-bold no-underline hover:underline">Register for free</a>
+                </p>
+            </form>
+
         </div>
-        <h2 class="text-3xl font-extrabold tracking-tight">BAncoBueno</h2>
-        <p class="text-base-content/60 mt-2">Bienvenido de nuevo, por favor ingresa tus datos</p>
-      </div>
-
-      <form (ngSubmit)="onSubmit()" class="space-y-5">
-        
-        <div class="form-control w-full">
-          <label class="label">
-            <span class="label-text font-semibold">Correo Electrónico</span>
-          </label>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-base-content/40">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" /></svg>
-            </span>
-            <input
-              type="email"
-              placeholder="nombre@ejemplo.com"
-              class="input input-bordered w-full pl-10 focus:input-primary transition-all"
-              [(ngModel)]="email"
-              name="email"
-              required
-            />
-          </div>
-        </div>
-
-        <div class="form-control w-full">
-          <div class="flex justify-between items-end mb-1">
-            <label class="label p-0">
-              <span class="label-text font-semibold">Contraseña</span>
-            </label>
-            <a href="#" class="text-xs link link-primary no-underline hover:underline">¿Olvidaste tu contraseña?</a>
-          </div>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-base-content/40">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-            </span>
-            <input
-              type="password"
-              placeholder="••••••••"
-              class="input input-bordered w-full pl-10 focus:input-primary transition-all"
-              [(ngModel)]="password"
-              name="password"
-              required
-            />
-          </div>
-        </div>
-
-        <div class="form-control mt-6">
-          <button class="btn btn-primary w-full shadow-lg group" type="submit">
-            <span>Iniciar Sesión</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </button>
-        </div>
-
-        <p class="text-center text-sm text-base-content/60 mt-4">
-          ¿No tienes una cuenta? 
-          <a routerLink="/register" class="link link-primary font-bold no-underline hover:underline">Regístrate gratis</a>
-        </p>
-      </form>
-
     </div>
-  </div>
 </div>

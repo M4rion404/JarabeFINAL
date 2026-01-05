@@ -1,101 +1,97 @@
-<div class="min-h-screen flex items-center justify-center bg-base-200">
-  <div class="card w-full max-w-md shadow-2xl bg-base-100">
-    <div class="card-body gap-4">
+<div id="RegisterPage" class="min-h-screen flex items-center justify-center bg-base-200">
+    <div id="RegisterCard" class="card w-full max-w-md shadow-2xl bg-base-100">
+        <div class="card-body gap-4">
 
-      <!-- Header -->
-      <div class="text-center">
-        <h2 class="text-2xl font-bold">Crear cuenta</h2>
-        <p class="text-sm opacity-60 mt-1">
-          Regístrate para comenzar
-        </p>
-      </div>
+            <div class="text-center">
+                <h2 class="text-2xl font-bold">Create Account</h2>
+                <p class="text-sm opacity-60 mt-1">
+                    Sign up to get started
+                </p>
+            </div>
 
-      <!-- Nombre -->
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">Nombre</span>
-        </label>
-        <div class="relative">
-          <input
-            type="text"
-            class="input input-bordered w-full pl-10"
-            placeholder="Juan Pérez"
-            [value]="name()"
-            (input)="name.set($any($event.target).value)"
-          />
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 opacity-50">
-            👤
-          </span>
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Full Name</span>
+                </label>
+                <div class="relative">
+                    <input
+                        id="NameInput"
+                        type="text"
+                        class="input input-bordered w-full pl-10"
+                        placeholder="John Doe"
+                        [value]="name()"
+                        (input)="name.set($any($event.target).value)"
+                    />
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 opacity-50">
+                        👤
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Email Address</span>
+                </label>
+                <div class="relative">
+                    <input
+                        id="EmailInput"
+                        type="email"
+                        class="input input-bordered w-full pl-10"
+                        placeholder="email@example.com"
+                        [value]="email()"
+                        (input)="email.set($any($event.target).value)"
+                    />
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 opacity-50">
+                        ✉️
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Password</span>
+                </label>
+                <div class="relative">
+                    <input
+                        id="PasswordInput"
+                        type="password"
+                        class="input input-bordered w-full pl-10"
+                        placeholder="••••••••"
+                        [value]="password()"
+                        (input)="password.set($any($event.target).value)"
+                    />
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 opacity-50">
+                        🔒
+                    </span>
+                </div>
+            </div>
+
+            @if (errorMessage()) {
+                <div id="ErrorAlert" class="alert alert-error text-sm">
+                    {{ errorMessage() }}
+                </div>
+            }
+
+            <button
+                id="SignUpButton"
+                class="btn btn-primary w-full mt-2"
+                (click)="OnSubmit()"
+                [disabled]="isLoading()"
+            >
+                @if (isLoading()) {
+                    <span class="loading loading-spinner"></span>
+                } @else {
+                    Create Account
+                }
+            </button>
+
+            <p class="text-sm text-center opacity-70">
+                Already have an account?
+                <a id="LoginLink" routerLink="/login" class="link link-primary font-medium">
+                    Log in
+                </a>
+            </p>
+
         </div>
-      </div>
-
-      <!-- Email -->
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">Correo electrónico</span>
-        </label>
-        <div class="relative">
-          <input
-            type="email"
-            class="input input-bordered w-full pl-10"
-            placeholder="correo@ejemplo.com"
-            [value]="email()"
-            (input)="email.set($any($event.target).value)"
-          />
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 opacity-50">
-            ✉️
-          </span>
-        </div>
-      </div>
-
-      <!-- Password -->
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">Contraseña</span>
-        </label>
-        <div class="relative">
-          <input
-            type="password"
-            class="input input-bordered w-full pl-10"
-            placeholder="••••••••"
-            [value]="password()"
-            (input)="password.set($any($event.target).value)"
-          />
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 opacity-50">
-            🔒
-          </span>
-        </div>
-      </div>
-
-      <!-- Error inline (opcional) -->
-      @if (error()) {
-        <div class="alert alert-error text-sm">
-          {{ error() }}
-        </div>
-      }
-
-      <!-- Button -->
-      <button
-        class="btn btn-primary w-full mt-2"
-        (click)="submit()"
-        [disabled]="loading()"
-      >
-        @if (loading()) {
-          <span class="loading loading-spinner"></span>
-        } @else {
-          Crear cuenta
-        }
-      </button>
-
-      <!-- Footer -->
-      <p class="text-sm text-center opacity-70">
-        ¿Ya tienes cuenta?
-        <a routerLink="/login" class="link link-primary font-medium">
-          Inicia sesión
-        </a>
-      </p>
-
     </div>
-  </div>
 </div>
-

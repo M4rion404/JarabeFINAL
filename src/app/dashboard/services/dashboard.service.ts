@@ -3,18 +3,22 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
-export class DashboardService {
-  private API = 'http://localhost:3000';
+export class DashboardService 
+{
+    private apiUrl = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) 
+    {}
 
-  getUserInfo(): Observable<any> {
-    return this.http.get(`${this.API}/users/me`);
-  }
+    public GetUserInfo(): Observable<any> 
+    {
+        return this.http.get(`${this.apiUrl}/users/me`);
+    }
 
-  getTransactions(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.API}/transactions`);
-  }
+    public GetTransactions(): Observable<any[]> 
+    {
+        return this.http.get<any[]>(`${this.apiUrl}/transactions`);
+    }
 }

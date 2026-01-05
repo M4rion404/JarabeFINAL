@@ -1,227 +1,197 @@
-@if (loading()) {
-<!-- SKELETON DASHBOARD -->
-<div class="p-6 space-y-6">
-  <div class="skeleton h-20 w-full"></div>
+@if (isLoading()) 
+{
+    <div id="SkeletonContainer" class="p-6 space-y-6">
+        <div class="skeleton h-20 w-full"></div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <div class="skeleton h-32"></div>
-    <div class="skeleton h-32"></div>
-    <div class="skeleton h-32"></div>
-  </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="skeleton h-32"></div>
+            <div class="skeleton h-32"></div>
+            <div class="skeleton h-32"></div>
+        </div>
 
-  <div class="skeleton h-40 w-full"></div>
-</div>
-
-} @else if (error()) {
-
-<!-- ERROR STATE -->
-<app-navbar />
-
-<div class="p-6">
-  <div class="alert alert-error shadow-lg">
-    {{ error() }}
-  </div>
-</div>
-
-} @else {
-
-<!-- DASHBOARD REAL -->
-<app-navbar />
-
-<div class="p-6 bg-base-200 min-h-screen space-y-8">
-  <h1 class="text-2xl font-bold">Dashboard</h1>
-
-  <!-- CARDS SUPERIORES -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- Saldo -->
-    <div class="card bg-base-100 shadow">
-      <div class="card-body">
-        <h2 class="card-title">Saldo actual</h2>
-        <p class="text-3xl font-bold text-green-600">${{ balance() | number : '1.2-2' }}</p>
-      </div>
+        <div class="skeleton h-40 w-full"></div>
     </div>
+} 
+@else if (errorMessage()) 
+{
+    <app-navbar />
 
-    <!-- Usuario -->
-    <div class="card bg-base-100 shadow border-primary">
-      <div class="card-body">
-        <div class="flex items-center gap-4">
-          <div class="avatar placeholder">
-            <div class="bg-neutral text-neutral-content rounded-full w-12">
-              <span class="text-xl">
-                {{ user()?.name?.charAt(0) || 'U' }}
-              </span>
+    <div id="ErrorContainer" class="p-6">
+        <div class="alert alert-error shadow-lg">
+            {{ errorMessage() }}
+        </div>
+    </div>
+} 
+@else 
+{
+    <app-navbar />
+
+    <div id="DashboardMainContent" class="p-6 bg-base-200 min-h-screen space-y-8">
+        <h1 class="text-2xl font-bold">Dashboard</h1>
+
+        <div id="SummaryCardsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div id="BalanceCard" class="card bg-base-100 shadow">
+                <div class="card-body">
+                    <h2 class="card-title">Current Balance</h2>
+                    <p class="text-3xl font-bold text-green-600">${{ accountBalance() | number : '1.2-2' }}</p>
+                </div>
             </div>
-          </div>
 
-          <div>
-            <!-- <pre class="text-xs bg-black text-green-400 p-2">{{ user() | json }}</pre> -->
-            <!-- <h2 class="card-title text-sm opacity-70 uppercase mb-0">{{ user()?.name }}</h2> -->
-            <p class="text-lg font-bold leading-tight">{{ user()?.name }}</p>
-            <p class="text-xs opacity-60">{{ user()?.email }}</p>
-          </div>
-        </div>
+            <div id="UserProfileCard" class="card bg-base-100 shadow border-primary">
+                <div class="card-body">
+                    <div class="flex items-center gap-4">
+                        <div class="avatar placeholder">
+                            <div class="bg-neutral text-neutral-content rounded-full w-12">
+                                <span class="text-xl">
+                                    {{ currentUser()?.name?.charAt(0) || 'U' }}
+                                </span>
+                            </div>
+                        </div>
 
-        <div class="card-actions justify-end mt-4">
-          <div class="badge badge-ghost text-xs py-3 border-base-300">Cuenta Principal</div>
-        </div>
-      </div>
-    </div>
+                        <div>
+                            <p class="text-lg font-bold leading-tight">{{ currentUser()?.name }}</p>
+                            <p class="text-xs opacity-60">{{ currentUser()?.email }}</p>
+                        </div>
+                    </div>
 
-    <!-- Movimientos -->
-    <div class="card bg-base-100 shadow">
-      <div class="card-body">
-        <h2 class="card-title">Movimientos</h2>
-        <p class="text-xl font-semibold">
-          {{ transactions().length }}
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!--Tarjeta Visible-->
-  <a href="#" class="hover-3d my-12 mx-2 cursor-pointer px-80">
-    <!-- content -->
-    <div
-      class="card w-96 bg-black text-white bg-[radial-gradient(circle_at_bottom_left,#ffffff04_35%,transparent_36%),radial-gradient(circle_at_top_right,#ffffff04_35%,transparent_36%)] bg-size-[4.95em_4.95em]"
-    >
-      <div class="card-body">
-        <div class="flex justify-between mb-10">
-          <div class="font-bold">BAnco Bueno</div>
-          <div class="text-5xl opacity-10">❁</div>
-        </div>
-        <div class="text-lg mb-4 opacity-40">0210 8820 1150 0222</div>
-        <div class="flex justify-between">
-          <div>
-            <div class="text-xs opacity-20">CARD HOLDER</div>
-            <div>{{ user().name | uppercase }}</div>
-          </div>
-          <div>
-            <div class="text-xs opacity-20">EXPIRES</div>
-            <div>29/08</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 8 empty divs needed for the 3D effect -->
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-  </a>
-
-  <!--Tarjeta Visible-->
-  <a href="#" class="hover-3d my-12 mx-2 cursor-pointer">
-    <!-- content -->
-    <div
-      class="card w-96 bg-gray-900 text-white bg-[radial-gradient(circle_at_bottom_left,#ffffff04_35%,transparent_36%),radial-gradient(circle_at_top_right,#ffffff04_35%,transparent_36%)] bg-size-[4.95em_4.95em]"
-    >
-      <div class="card-body">
-        <div class="flex justify-between mb-10">
-          <div class="font-bold">BAnco Bueno</div>
-          <div class="text-5xl opacity-10">❁</div>
-        </div>
-        <div class="text-lg mb-4 opacity-40">0130 7620 1150 0333</div>
-        <div class="flex justify-between">
-          <div>
-            <div class="text-xs opacity-20">CARD HOLDER</div>
-            <div>{{ user().name | uppercase }}</div>
-          </div>
-          <div>
-            <div class="text-xs opacity-20">EXPIRES</div>
-            <div>29/08</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 8 empty divs needed for the 3D effect -->
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-  </a>
-
-  <!-- TABLA DE MOVIMIENTOS -->
-  <div class="card bg-base-100 shadow-md w-full shadow-accent">
-    <div class="card-body">
-      <h2 class="card-title mb-4">Últimos movimientos</h2>
-
-      @if (transactions().length === 0) {
-      <p class="opacity-70">No hay movimientos registrados</p>
-      } @else {
-      <div class="overflow-x-auto">
-        <table class="table w-full">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Tipo</th>
-              <th>Destino</th>
-              <th class="text-right">Monto</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            @for (tx of transactions(); track tx.id) {
-            <tr>
-              <td>{{ tx.createdAt | date : 'short' }}</td>
-
-              <td>
-                <span
-                  class="px-3 py-1 rounded-full text-sm font-semibold"
-                  [ngClass]="{
-                    'bg-green-100 text-green-700': tx.type === 'IN',
-                    'bg-red-100 text-red-700': tx.type === 'OUT'
-                  }"
-                >
-                  {{ tx.type === 'IN' ? 'Depósito' : 'Transferencia' }}
-                </span>
-              </td>
-
-              <td>
-                <div class="font-medium">
-                  {{ tx.counterparty.name || tx.counterparty.email }}
+                    <div class="card-actions justify-end mt-4">
+                        <div class="badge badge-ghost text-xs py-3 border-base-300">Primary Account</div>
+                    </div>
                 </div>
-                <div class="text-xs opacity-60">
-                  {{ tx.counterparty.email }}
+            </div>
+
+            <div id="MovementsSummaryCard" class="card bg-base-100 shadow">
+                <div class="card-body">
+                    <h2 class="card-title">Movements</h2>
+                    <p class="text-xl font-semibold">
+                        {{ transactionHistory().length }}
+                    </p>
                 </div>
-              </td>
+            </div>
+        </div>
 
-              <td class="text-right font-semibold">${{ tx.amount | number : '1.2-2' }}</td>
-            </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-      }
+        <div id="CreditCardsContainer" class="flex flex-wrap gap-8 justify-center py-8">
+            
+            <a id="BlackCreditCard" href="#" class="hover-3d cursor-pointer">
+                <div class="card w-96 bg-black text-white bg-[radial-gradient(circle_at_bottom_left,#ffffff04_35%,transparent_36%),radial-gradient(circle_at_top_right,#ffffff04_35%,transparent_36%)] bg-size-[4.95em_4.95em]">
+                    <div class="card-body">
+                        <div class="flex justify-between mb-10">
+                            <div class="font-bold">Good Bank</div>
+                            <div class="text-5xl opacity-10">❁</div>
+                        </div>
+                        <div class="text-lg mb-4 opacity-40">0210 8820 1150 0222</div>
+                        <div class="flex justify-between">
+                            <div>
+                                <div class="text-xs opacity-20">CARD HOLDER</div>
+                                <div>{{ currentUser()?.name | uppercase }}</div>
+                            </div>
+                            <div>
+                                <div class="text-xs opacity-20">EXPIRES</div>
+                                <div>29/08</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+            </a>
+
+            <a id="GrayCreditCard" href="#" class="hover-3d cursor-pointer">
+                <div class="card w-96 bg-gray-900 text-white bg-[radial-gradient(circle_at_bottom_left,#ffffff04_35%,transparent_36%),radial-gradient(circle_at_top_right,#ffffff04_35%,transparent_36%)] bg-size-[4.95em_4.95em]">
+                    <div class="card-body">
+                        <div class="flex justify-between mb-10">
+                            <div class="font-bold">Good Bank</div>
+                            <div class="text-5xl opacity-10">❁</div>
+                        </div>
+                        <div class="text-lg mb-4 opacity-40">0130 7620 1150 0333</div>
+                        <div class="flex justify-between">
+                            <div>
+                                <div class="text-xs opacity-20">CARD HOLDER</div>
+                                <div>{{ currentUser()?.name | uppercase }}</div>
+                            </div>
+                            <div>
+                                <div class="text-xs opacity-20">EXPIRES</div>
+                                <div>29/08</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+            </a>
+        </div>
+
+        <div id="RecentMovementsContainer" class="card bg-base-100 shadow-md w-full shadow-accent">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Recent Movements</h2>
+
+                @if (transactionHistory().length === 0) 
+                {
+                    <p class="opacity-70">No movements registered yet</p>
+                } 
+                @else 
+                {
+                    <div class="overflow-x-auto">
+                        <table id="TransactionsTable" class="table w-full">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Counterparty</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (transaction of transactionHistory(); track transaction.id) 
+                                {
+                                    <tr>
+                                        <td>{{ transaction.createdAt | date : 'short' }}</td>
+                                        <td>
+                                            <span class="px-3 py-1 rounded-full text-sm font-semibold"
+                                                  [ngClass]="{
+                                                    'bg-green-100 text-green-700': transaction.type === 'IN',
+                                                    'bg-red-100 text-red-700': transaction.type === 'OUT'
+                                                  }">
+                                                {{ transaction.type === 'IN' ? 'Deposit' : 'Transfer' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="font-medium">
+                                                {{ transaction.counterparty.name || transaction.counterparty.email }}
+                                            </div>
+                                            <div class="text-xs opacity-60">
+                                                {{ transaction.counterparty.email }}
+                                            </div>
+                                        </td>
+                                        <td class="text-right font-semibold">${{ transaction.amount | number : '1.2-2' }}</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+
+            <button id="NewTransferButton" class="btn btn-primary m-4" (click)="OpenTransferModal()">
+                New Transfer
+            </button>
+        </div>
+
+        @if (isTransferModalVisible()) 
+        {
+            <div id="TransferModal" class="modal modal-open">
+                <div class="modal-box max-w-lg">
+                    <h3 class="font-bold text-lg mb-4">Bank Transfer</h3>
+
+                    <app-transfer [currentUserEmail]="currentUser()?.email" (completed)="OnTransferCompleted()" />
+
+                    <div class="modal-action">
+                        <button id="CloseModalButton" class="btn" (click)="CloseTransferModal()">Close</button>
+                    </div>
+                </div>
+
+                <div id="ModalBackdrop" class="modal-backdrop" (click)="CloseTransferModal()"></div>
+            </div>
+        }
     </div>
-
-    <button class="btn btn-primary m-4" (click)="openTransfer()">Nueva transferencia</button>
-  </div>
-
-  <!-- MODAL TRANSFERENCIA -->
-  @if (showTransferModal()) {
-  <div class="modal modal-open">
-    <div class="modal-box max-w-lg">
-      <h3 class="font-bold text-lg mb-4">Transferencia bancaria</h3>
-
-      <app-transfer [currentUserEmail]="user()?.email" (completed)="onTransferCompleted()" />
-
-      <div class="modal-action">
-        <button class="btn" (click)="closeTransfer()">Cerrar</button>
-      </div>
-    </div>
-
-    <div class="modal-backdrop" (click)="closeTransfer()"></div>
-  </div>
-  }
-</div>
 }

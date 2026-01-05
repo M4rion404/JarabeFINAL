@@ -1,41 +1,45 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-  HttpErrorResponse
+import { 
+    HttpInterceptorFn, 
+    HttpRequest, 
+    HttpHandlerFn, 
+    HttpEvent, 
+    HttpErrorResponse 
 } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
+export const AuthInterceptor: HttpInterceptorFn = (
+    request: HttpRequest<unknown>, 
+    next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> => 
+{
+    const authService = inject(AuthService);
+    const router = inject(Router);
+    const sessionToken = authService.GetToken();
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+    const authenticatedRequest = sessionToken
+        ? request.clone({
+            setHeaders: { Authorization: `Bearer ${sessionToken}` }
+          })
+        : request;
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = this.authService.getToken();
-
-    const authReq = token
-      ? req.clone({
-          setHeaders: { Authorization: `Bearer ${token}` }
+    return next(authenticatedRequest).pipe(
+        catchError((error: HttpErrorResponse) => 
+        {
+            if (error.status === 401) 
+            {
+                ExecuteSessionLogout(authService, router);
+            }
+            
+            return throwError(() => error);
         })
-      : req;
-
-    return next.handle(authReq).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.authService.logout();
-          alert('Tu sesión expiró. Inicia sesión nuevamente.');
-          this.router.navigate(['/login']);
-        }
-        return throwError(() => error);
-      })
     );
-  }
+};
+
+function ExecuteSessionLogout(authService: AuthService, router: Router): void 
+{
+    authService.Logout();
+    router.navigate(['/login']);
 }

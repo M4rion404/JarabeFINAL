@@ -2,33 +2,40 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface Transaction {
-  id: string;
-  amount: number;
-  type: 'IN' | 'OUT';
-  counterparty: {
-    name: string;
-    email: string;
-  };
-  createdAt: string;
+export interface Transaction 
+{
+    id: string;
+    amount: number;
+    type: 'IN' | 'OUT';
+    counterparty: {
+        name: string;
+        email: string;
+    };
+    createdAt: string;
 }
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
-export class TransactionService {
-  private API_URL = 'http://localhost:3000/transactions';
+export class TransactionService 
+{
+    private apiUrl = 'http://localhost:3000/transactions';
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) 
+    {}
 
-  getTransactions(): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(this.API_URL);
-  }
+    public GetTransactions(): Observable<Transaction[]> 
+    {
+        return this.http.get<Transaction[]>(this.apiUrl);
+    }
 
-transfer(amount: number, toEmail: string): Observable<void> {
-    return this.http.post<void>(`${this.API_URL}/transfer`, {
-      amount,
-      toEmail,
-    });
-  }
+    public Transfer(amount: number, recipientEmail: string): Observable<void> 
+    {
+        const transferPayload = {
+            amount: amount,
+            toEmail: recipientEmail
+        };
+
+        return this.http.post<void>(`${this.apiUrl}/transfer`, transferPayload);
+    }
 }
