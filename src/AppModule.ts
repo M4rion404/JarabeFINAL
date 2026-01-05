@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from './Prisma/PrismaModule';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { AccountsModule } from './accounts/accounts.module';
-import { TransactionsModule } from './transactions/transactions.module';
+import { AuthModule } from './auth/AuthModule';
+import { UserModule } from './user/UserModule';
+import { AccountsModule } from './accounts/AccountsModule';
+import { TransactionsModule } from './transactions/TransactionsModule';
 
 @Module({
   imports: [
